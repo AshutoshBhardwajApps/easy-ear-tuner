@@ -13,10 +13,8 @@ struct HearingTestView: View {
     @State private var selectedEar: Ear = .both
     @State private var viewPhase: ViewPhase = .setup
     @State private var result: HearingResult?
-    @State private var showWitness = false
 
     private let generator = SoundGenerator()
-
     private enum ViewPhase { case setup, active, result }
 
     var body: some View {
@@ -28,8 +26,7 @@ struct HearingTestView: View {
                 TestSetupView(selectedEar: $selectedEar, onStart: startTest)
                     .transition(.opacity)
             case .active:
-                TestActiveView(engine: engine, showWitness: $showWitness,
-                               onTap: engine.subjectTapped)
+                SaboteurActiveView(engine: engine, onTap: engine.subjectTapped)
                     .transition(.opacity)
             case .result:
                 if let r = result {
@@ -41,9 +38,6 @@ struct HearingTestView: View {
         .animation(.easeInOut(duration: 0.25), value: viewPhase)
         .onChange(of: engine.phase) { _, newPhase in
             if newPhase == .finished { commitResult() }
-        }
-        .sheet(isPresented: $showWitness) {
-            WitnessSheetView(engine: engine)
         }
         .navigationBarHidden(true)
         .onDisappear {
@@ -88,7 +82,13 @@ private struct TestSetupView: View {
             Text("Hearing Test")
                 .font(.system(size: 30, weight: .black))
                 .foregroundColor(.white)
-                .padding(.bottom, 32)
+                .padding(.bottom, 4)
+
+            Text("Saboteur Mode")
+                .font(.system(size: 14, weight: .bold))
+                .foregroundColor(.green.opacity(0.7))
+                .tracking(3)
+                .padding(.bottom, 28)
 
             // Ear picker
             VStack(spacing: 10) {
@@ -108,18 +108,17 @@ private struct TestSetupView: View {
                     }
                 }
             }
-            .padding(.bottom, 32)
+            .padding(.bottom, 28)
 
-            // Instructions
             VStack(alignment: .leading, spacing: 14) {
                 InstructionRow(icon: "waveform",
-                               text: "A tone sweeps from 2,000 Hz up to 20,000 Hz over 45 seconds.")
-                InstructionRow(icon: "hand.raised.fill",
-                               text: "Tap the big button the moment you can NO LONGER hear it.")
-                InstructionRow(icon: "exclamationmark.triangle.fill",
-                               text: "Watch out — there are silent gaps. Don't tap during a gap or it counts against you!")
-                InstructionRow(icon: "eye.fill",
-                               text: "Close your eyes or look away during the test. A witness taps 👁 Witness to monitor — the screen won't show you any hints.")
+                               text: "A tone sweeps from 2,000 Hz → 20,000 Hz over 45 seconds.")
+                InstructionRow(icon: "eyes.inverse",
+                               text: "TESTER: Close your eyes. Tap the button whenever you hear silence.")
+                InstructionRow(icon: "hand.point.up.left.fill",
+                               text: "SABOTEUR: Hold the top panel to mute — create as many silent gaps as you like.")
+                InstructionRow(icon: "checkmark.circle.fill",
+                               text: "Tap during a silence = correct detection. Tap during tone = your hearing cutoff.")
             }
             .padding(.horizontal, 28)
 
@@ -155,18 +154,20 @@ private struct InstructionRow: View {
     }
 }
 
-// MARK: - Active test
+// MARK: - Saboteur active screen
 
-private struct TestActiveView: View {
+private struct SaboteurActiveView: View {
     @ObservedObject var engine: SweepEngine
-    @Binding var showWitness: Bool
     let onTap: () -> Void
 
-    @State private var pulse: CGFloat = 1.0
+    // GestureState resets to false automatically when finger lifts —
+    // no explicit onEnded needed to restore the tone.
+    @GestureState private var isSaboteurHolding = false
 
     var body: some View {
         VStack(spacing: 0) {
-            // Progress bar
+
+            // ── Progress bar ──────────────────────────────────────────
             GeometryReader { geo in
                 ZStack(alignment: .leading) {
                     Rectangle().fill(Color.white.opacity(0.08))
@@ -177,170 +178,158 @@ private struct TestActiveView: View {
             }
             .frame(height: 4)
 
-            // Witness button
-            HStack {
-                Spacer()
-                Button { showWitness = true } label: {
-                    Label("Witness", systemImage: "eye.fill")
-                        .font(.caption.weight(.semibold))
-                        .foregroundColor(.white.opacity(0.6))
-                        .padding(.horizontal, 14)
-                        .padding(.vertical, 8)
-                        .background(Color.white.opacity(0.08))
-                        .cornerRadius(8)
-                }
-                .padding(.trailing, 20)
-                .padding(.top, 14)
-            }
-
-            Spacer()
-
-            // Neutral waveform — looks identical whether the tone is playing or silent.
-            // Any visual change here would tip off the subject during gap intervals.
-            ZStack {
-                Circle()
-                    .fill(Color.green.opacity(0.12))
-                    .frame(width: 160, height: 160)
-                    .scaleEffect(pulse)
-
-                Image(systemName: "waveform")
-                    .font(.system(size: 72, weight: .thin))
-                    .foregroundColor(.green)
-            }
-            .onAppear {
-                withAnimation(.easeInOut(duration: 0.9).repeatForever(autoreverses: true)) {
-                    pulse = 1.12
-                }
-            }
-
-            Text("Tap when you can no longer hear the tone")
-                .font(.caption)
-                .foregroundColor(.white.opacity(0.35))
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 32)
-                .padding(.top, 12)
-
-            Spacer()
-
-            // Main button
-            Button(action: onTap) {
-                VStack(spacing: 10) {
-                    Image(systemName: "hand.raised.fill")
-                        .font(.system(size: 32))
-                    Text("I CAN'T HEAR IT!")
-                        .font(.system(size: 22, weight: .black))
-                        .tracking(1)
-                }
-                .foregroundColor(.black)
+            // ── SABOTEUR panel (top) ───────────────────────────────────
+            SaboteurPanel(isHolding: isSaboteurHolding)
                 .frame(maxWidth: .infinity)
-                .frame(height: 150)
-                .background(Color.green)
-                .cornerRadius(20)
-                .shadow(color: .green.opacity(0.35), radius: 24)
+                .frame(height: 190)
+                .gesture(
+                    DragGesture(minimumDistance: 0)
+                        .updating($isSaboteurHolding) { _, state, _ in state = true }
+                )
+                .onChange(of: isSaboteurHolding) { _, holding in
+                    engine.setWitnessMute(holding)
+                }
+
+            // ── Sine wave visualisation ────────────────────────────────
+            SineWaveView(
+                frequency:  engine.currentFrequency,
+                isMuted:    !engine.isTonePlaying
+            )
+            .frame(maxWidth: .infinity)
+            .frame(height: 110)
+            .padding(.vertical, 8)
+
+            // ── TESTER panel (bottom) ──────────────────────────────────
+            TesterPanel(onTap: onTap)
+                .frame(maxWidth: .infinity)
+                .frame(height: 190)
+        }
+        .background(Color.black)
+    }
+}
+
+// MARK: - Saboteur panel
+
+private struct SaboteurPanel: View {
+    let isHolding: Bool
+
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 0)
+                .fill(isHolding
+                      ? Color.orange.opacity(0.18)
+                      : Color.white.opacity(0.04))
+                .animation(.easeInOut(duration: 0.12), value: isHolding)
+
+            VStack(spacing: 10) {
+                Label("SABOTEUR", systemImage: "theatermasks.fill")
+                    .font(.system(size: 12, weight: .black))
+                    .foregroundColor(.orange.opacity(0.7))
+                    .tracking(3)
+
+                Spacer()
+
+                Image(systemName: isHolding ? "speaker.slash.fill" : "hand.point.up.left.fill")
+                    .font(.system(size: 36, weight: .thin))
+                    .foregroundColor(isHolding ? .orange : .white.opacity(0.4))
+                    .animation(.easeInOut(duration: 0.12), value: isHolding)
+
+                Text(isHolding ? "MUTED" : "Hold here to silence the tone")
+                    .font(.system(size: isHolding ? 20 : 14, weight: isHolding ? .black : .regular))
+                    .foregroundColor(isHolding ? .orange : .white.opacity(0.4))
+                    .animation(.easeInOut(duration: 0.12), value: isHolding)
+
+                Spacer()
             }
-            .padding(.horizontal, 28)
-            .padding(.bottom, 50)
+            .padding()
         }
     }
 }
 
-// MARK: - Witness sheet
+// MARK: - Tester panel
 
-struct WitnessSheetView: View {
-    @ObservedObject var engine: SweepEngine
-    @Environment(\.dismiss) private var dismiss
+private struct TesterPanel: View {
+    let onTap: () -> Void
+    @State private var pulse: CGFloat = 1.0
 
     var body: some View {
-        NavigationView {
-            ZStack {
-                Color(white: 0.05).ignoresSafeArea()
+        ZStack {
+            Color.white.opacity(0.03)
 
-                ScrollView {
-                    VStack(spacing: 20) {
-                        // Status card
-                        VStack(spacing: 8) {
-                            Image(systemName: engine.isTonePlaying
-                                  ? "speaker.wave.3.fill" : "speaker.slash.fill")
-                                .font(.system(size: 44))
-                                .foregroundColor(engine.isTonePlaying ? .green : .orange)
-                                .animation(.easeInOut(duration: 0.2), value: engine.isTonePlaying)
+            VStack(spacing: 8) {
+                Label("TESTER — EYES CLOSED", systemImage: "eye.slash.fill")
+                    .font(.system(size: 12, weight: .black))
+                    .foregroundColor(.green.opacity(0.6))
+                    .tracking(2)
 
-                            Text(engine.isTonePlaying ? "TONE PLAYING" : "SILENT GAP")
-                                .font(.system(size: 18, weight: .black))
-                                .foregroundColor(engine.isTonePlaying ? .green : .orange)
-                                .tracking(3)
-                                .animation(.none, value: engine.isTonePlaying)
+                Spacer()
 
-                            Text("\(engine.currentFrequency, specifier: "%.0f") Hz")
-                                .font(.title3.monospacedDigit())
-                                .foregroundColor(.white.opacity(0.6))
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding(24)
-                        .background(Color.white.opacity(0.06))
-                        .cornerRadius(16)
-
-                        // Tap log
-                        VStack(alignment: .leading, spacing: 0) {
-                            Text("TAP LOG")
-                                .font(.caption.weight(.bold))
-                                .foregroundColor(.white.opacity(0.4))
-                                .tracking(2)
-                                .padding(.bottom, 10)
-
-                            if engine.tapLog.isEmpty {
-                                Text("No taps yet…")
-                                    .font(.subheadline)
-                                    .foregroundColor(.white.opacity(0.3))
-                            } else {
-                                ForEach(engine.tapLog.indices, id: \.self) { i in
-                                    let tap = engine.tapLog[i]
-                                    HStack(spacing: 12) {
-                                        Image(systemName: tap.toneWasPlaying
-                                              ? "checkmark.circle.fill"
-                                              : "exclamationmark.circle.fill")
-                                            .foregroundColor(tap.toneWasPlaying ? .green : .orange)
-                                        VStack(alignment: .leading, spacing: 2) {
-                                            Text(tap.toneWasPlaying
-                                                 ? "Stopped at \(tap.frequency, specifier: "%.0f") Hz"
-                                                 : "False tap at \(tap.frequency, specifier: "%.0f") Hz")
-                                                .font(.subheadline.weight(.semibold))
-                                                .foregroundColor(.white)
-                                            Text(tap.toneWasPlaying
-                                                 ? "✅ Tone was playing — valid stop"
-                                                 : "⚠️ Tone was silent — gap tap")
-                                                .font(.caption)
-                                                .foregroundColor(.white.opacity(0.5))
-                                        }
-                                        Spacer()
-                                    }
-                                    .padding(.vertical, 10)
-                                    Divider().background(Color.white.opacity(0.08))
-                                }
-                            }
-                        }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(16)
-                        .background(Color.white.opacity(0.04))
-                        .cornerRadius(12)
-
-                        Text("Subject cannot see this screen's details.")
-                            .font(.caption)
-                            .foregroundColor(.white.opacity(0.3))
-                            .multilineTextAlignment(.center)
+                Button(action: onTap) {
+                    VStack(spacing: 8) {
+                        Image(systemName: "hand.raised.fill")
+                            .font(.system(size: 28))
+                        Text("I HEAR SILENCE!")
+                            .font(.system(size: 20, weight: .black))
+                            .tracking(1)
                     }
-                    .padding()
+                    .foregroundColor(.black)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 110)
+                    .background(Color.green)
+                    .cornerRadius(16)
+                    .shadow(color: .green.opacity(0.3), radius: 20)
+                    .scaleEffect(pulse)
                 }
+                .padding(.horizontal, 24)
+                .onAppear {
+                    withAnimation(.easeInOut(duration: 1.1).repeatForever(autoreverses: true)) {
+                        pulse = 1.03
+                    }
+                }
+
+                Spacer()
             }
-            .navigationTitle("Witness View")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") { dismiss() }.foregroundColor(.green)
+            .padding(.top, 10)
+        }
+    }
+}
+
+// MARK: - Sine wave visualisation
+
+struct SineWaveView: View {
+    let frequency: Double   // 2000…20000 Hz
+    let isMuted: Bool
+
+    var body: some View {
+        TimelineView(.animation) { tl in
+            Canvas { ctx, size in
+                let t      = tl.date.timeIntervalSinceReferenceDate
+                // Animation speed scales with frequency (higher pitch = faster scroll)
+                let speed  = 1.0 + (frequency - 2_000) / 18_000 * 3.5
+                let midY   = size.height / 2
+                let amp    = size.height * 0.42
+                let cycles = 3.5
+
+                var path = Path()
+                for i in 0...Int(size.width) {
+                    let x     = Double(i)
+                    let phase = (x / size.width) * .pi * 2 * cycles - t * speed * .pi * 2
+                    let y     = midY + amp * sin(phase)
+                    if i == 0 { path.move(to: .init(x: x, y: y)) }
+                    else       { path.addLine(to: .init(x: x, y: y)) }
                 }
+
+                ctx.stroke(
+                    path,
+                    with: .color(.green.opacity(0.9)),
+                    style: StrokeStyle(lineWidth: 2.5, lineCap: .round, lineJoin: .round)
+                )
             }
         }
-        .preferredColorScheme(.dark)
+        // Scaling Y to 0 flatlines the wave when muted — SwiftUI handles the animation.
+        .scaleEffect(y: isMuted ? 0.0 : 1.0, anchor: .center)
+        .animation(.easeInOut(duration: 0.18), value: isMuted)
+        .background(Color.black)
     }
 }
 
@@ -364,9 +353,9 @@ private struct TestResultView: View {
                     .font(.system(size: 28, weight: .black))
                     .foregroundColor(.white)
 
-                // Frequency card
+                // Max frequency
                 VStack(spacing: 6) {
-                    Text("MAX FREQUENCY HEARD")
+                    Text("HEARING CUTOFF")
                         .font(.caption.weight(.bold))
                         .foregroundColor(.white.opacity(0.45))
                         .tracking(2)
@@ -384,24 +373,24 @@ private struct TestResultView: View {
                 .cornerRadius(16)
                 .padding(.horizontal)
 
-                // Reliability card
+                // Silence detections
+                let detections = result.tapLog.filter { !$0.toneWasPlaying }.count
                 VStack(spacing: 6) {
-                    Text("RELIABILITY")
+                    Text("SABOTEUR GAPS CAUGHT")
                         .font(.caption.weight(.bold))
                         .foregroundColor(.white.opacity(0.45))
                         .tracking(2)
                     HStack(spacing: 8) {
-                        Image(systemName: reliabilityIcon)
-                            .foregroundColor(reliabilityColor)
-                        Text(result.reliabilityEnum.rawValue)
+                        Image(systemName: "checkmark.seal.fill")
+                            .foregroundColor(detections > 0 ? .green : .white.opacity(0.3))
+                        Text(detections == 0 ? "None detected" : "\(detections) silence\(detections == 1 ? "" : "s") caught")
                             .font(.headline)
                             .foregroundColor(.white)
                     }
-                    Text(result.falseTapCount == 0
-                         ? "No false taps — clean result"
-                         : "\(result.falseTapCount) tap\(result.falseTapCount == 1 ? "" : "s") during silent gaps")
+                    Text("Saboteur can verify against how many gaps they actually created.")
                         .font(.caption)
-                        .foregroundColor(.white.opacity(0.5))
+                        .foregroundColor(.white.opacity(0.4))
+                        .multilineTextAlignment(.center)
                 }
                 .padding(20)
                 .frame(maxWidth: .infinity)
@@ -409,12 +398,12 @@ private struct TestResultView: View {
                 .cornerRadius(16)
                 .padding(.horizontal)
 
-                // Meta
+                // Ear + date
                 Text("\(result.ear) ear · \(result.date.formatted(date: .abbreviated, time: .shortened))")
                     .font(.caption)
                     .foregroundColor(.white.opacity(0.35))
 
-                // Tap log detail
+                // Tap log
                 if !result.tapLog.isEmpty {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("TAP LOG")
@@ -425,11 +414,11 @@ private struct TestResultView: View {
                             let tap = result.tapLog[i]
                             HStack(spacing: 8) {
                                 Image(systemName: tap.toneWasPlaying
-                                      ? "checkmark.circle" : "exclamationmark.circle")
-                                    .foregroundColor(tap.toneWasPlaying ? .green : .orange)
+                                      ? "flag.checkered" : "checkmark.circle")
+                                    .foregroundColor(tap.toneWasPlaying ? .green : .cyan)
                                 Text(tap.toneWasPlaying
-                                     ? "Stopped at \(tap.frequency, specifier: "%.0f") Hz"
-                                     : "False tap at \(tap.frequency, specifier: "%.0f") Hz")
+                                     ? "Cutoff at \(tap.frequency, specifier: "%.0f") Hz"
+                                     : "Silence detected at \(tap.frequency, specifier: "%.0f") Hz")
                                     .font(.caption)
                                     .foregroundColor(.white.opacity(0.7))
                             }
@@ -462,22 +451,6 @@ private struct TestResultView: View {
                 .padding(.horizontal, 28)
                 .padding(.bottom, 40)
             }
-        }
-    }
-
-    private var reliabilityIcon: String {
-        switch result.reliabilityEnum {
-        case .high:   return "checkmark.seal.fill"
-        case .medium: return "questionmark.circle.fill"
-        case .low:    return "exclamationmark.triangle.fill"
-        }
-    }
-
-    private var reliabilityColor: Color {
-        switch result.reliabilityEnum {
-        case .high:   return .green
-        case .medium: return .yellow
-        case .low:    return .red
         }
     }
 }

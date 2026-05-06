@@ -119,7 +119,7 @@ private struct TestSetupView: View {
                 InstructionRow(icon: "exclamationmark.triangle.fill",
                                text: "Watch out — there are silent gaps. Don't tap during a gap or it counts against you!")
                 InstructionRow(icon: "eye.fill",
-                               text: "A witness can tap 👁 Witness to see a live status feed you can't see.")
+                               text: "Close your eyes or look away during the test. A witness taps 👁 Witness to monitor — the screen won't show you any hints.")
             }
             .padding(.horizontal, 28)
 
@@ -195,40 +195,30 @@ private struct TestActiveView: View {
 
             Spacer()
 
-            // Waveform icon — pulses when tone is playing, dims during gaps
+            // Neutral waveform — looks identical whether the tone is playing or silent.
+            // Any visual change here would tip off the subject during gap intervals.
             ZStack {
                 Circle()
-                    .fill(engine.isTonePlaying
-                          ? Color.green.opacity(0.12)
-                          : Color.orange.opacity(0.08))
+                    .fill(Color.green.opacity(0.12))
                     .frame(width: 160, height: 160)
-                    .scaleEffect(engine.isTonePlaying ? pulse : 1.0)
+                    .scaleEffect(pulse)
 
                 Image(systemName: "waveform")
                     .font(.system(size: 72, weight: .thin))
-                    .foregroundColor(engine.isTonePlaying ? .green : .orange.opacity(0.5))
-                    .scaleEffect(engine.isTonePlaying ? pulse : 0.85)
+                    .foregroundColor(.green)
             }
-            .animation(.easeInOut(duration: 0.4), value: engine.isTonePlaying)
             .onAppear {
                 withAnimation(.easeInOut(duration: 0.9).repeatForever(autoreverses: true)) {
                     pulse = 1.12
                 }
             }
 
-            // Gap label
-            ZStack {
-                if !engine.isTonePlaying {
-                    Text("— SILENT GAP — DON'T TAP —")
-                        .font(.caption.weight(.bold))
-                        .foregroundColor(.orange)
-                        .tracking(2)
-                        .transition(.opacity)
-                }
-            }
-            .frame(height: 24)
-            .padding(.top, 12)
-            .animation(.easeInOut(duration: 0.2), value: engine.isTonePlaying)
+            Text("Tap when you can no longer hear the tone")
+                .font(.caption)
+                .foregroundColor(.white.opacity(0.35))
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 32)
+                .padding(.top, 12)
 
             Spacer()
 

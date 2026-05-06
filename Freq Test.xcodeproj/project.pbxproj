@@ -10,6 +10,14 @@
 		E150AA022C9E5FB000145149 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E150AA012C9E5FB000145149 /* ContentView.swift */; };
 		E150AA042C9E5FB200145149 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E150AA032C9E5FB200145149 /* Assets.xcassets */; };
 		E150AA072C9E5FB200145149 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E150AA062C9E5FB200145149 /* Preview Assets.xcassets */; };
+		13B61B313FCE469CAB0C6B91 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F40E4A7093EA4F1E8390A597 /* Constants.swift */; };
+		A2F0FD863323421CB50D6F18 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC47F2627D047D180BC877C /* AppDelegate.swift */; };
+		266B43DBE6B5475EBA69A46D /* AdManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B187F12B0F45889534DBC1 /* AdManager.swift */; };
+		D981CF3CA367424CA06AAFAF /* AdPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B1399134F89468EA8C1E6DC /* AdPresenter.swift */; };
+		2C0D88D1136143E28F9A610D /* PurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCFFA7B7837443E18ADB0C4F /* PurchaseManager.swift */; };
+		48A56AACF788487AA9156C53 /* SettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59D4F96DDD74C218708DCEE /* SettingsStore.swift */; };
+		4564B6D3725349719DA67B03 /* RemoveAdsPromoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC7D61F42CF4E379ABBA731 /* RemoveAdsPromoView.swift */; };
+		E39A226413734895BA5BE66F /* FreqTestApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D124C18A3B804C9D87A8113E /* FreqTestApp.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -17,6 +25,14 @@
 		E150AA012C9E5FB000145149 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E150AA032C9E5FB200145149 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E150AA062C9E5FB200145149 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		F40E4A7093EA4F1E8390A597 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		4FC47F2627D047D180BC877C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		21B187F12B0F45889534DBC1 /* AdManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdManager.swift; sourceTree = "<group>"; };
+		3B1399134F89468EA8C1E6DC /* AdPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdPresenter.swift; sourceTree = "<group>"; };
+		DCFFA7B7837443E18ADB0C4F /* PurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseManager.swift; sourceTree = "<group>"; };
+		A59D4F96DDD74C218708DCEE /* SettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStore.swift; sourceTree = "<group>"; };
+		5CC7D61F42CF4E379ABBA731 /* RemoveAdsPromoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveAdsPromoView.swift; sourceTree = "<group>"; };
+		D124C18A3B804C9D87A8113E /* FreqTestApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreqTestApp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,6 +66,14 @@
 			isa = PBXGroup;
 			children = (
 				E150AA012C9E5FB000145149 /* ContentView.swift */,
+				F40E4A7093EA4F1E8390A597 /* Constants.swift */,
+				4FC47F2627D047D180BC877C /* AppDelegate.swift */,
+				21B187F12B0F45889534DBC1 /* AdManager.swift */,
+				3B1399134F89468EA8C1E6DC /* AdPresenter.swift */,
+				DCFFA7B7837443E18ADB0C4F /* PurchaseManager.swift */,
+				A59D4F96DDD74C218708DCEE /* SettingsStore.swift */,
+				5CC7D61F42CF4E379ABBA731 /* RemoveAdsPromoView.swift */,
+				D124C18A3B804C9D87A8113E /* FreqTestApp.swift */,
 				E150AA032C9E5FB200145149 /* Assets.xcassets */,
 				E150AA052C9E5FB200145149 /* Preview Content */,
 			);
@@ -135,6 +159,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				E150AA022C9E5FB000145149 /* ContentView.swift in Sources */,
+				13B61B313FCE469CAB0C6B91 /* Constants.swift in Sources */,
+				A2F0FD863323421CB50D6F18 /* AppDelegate.swift in Sources */,
+				266B43DBE6B5475EBA69A46D /* AdManager.swift in Sources */,
+				D981CF3CA367424CA06AAFAF /* AdPresenter.swift in Sources */,
+				2C0D88D1136143E28F9A610D /* PurchaseManager.swift in Sources */,
+				48A56AACF788487AA9156C53 /* SettingsStore.swift in Sources */,
+				4564B6D3725349719DA67B03 /* RemoveAdsPromoView.swift in Sources */,
+				E39A226413734895BA5BE66F /* FreqTestApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -266,7 +298,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"Freq Test/Preview Content\"";
 				DEVELOPMENT_TEAM = 78MZ33WP9X;
 				ENABLE_PREVIEWS = YES;
@@ -275,18 +307,25 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight <key>UISupportedInterfaceOrientations~ipad</key";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 2.0;
+				NEW_SETTING = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ashutoshbhardwaj.easyeartune;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
+				UIDeviceFamily = 1;
 			};
 			name = Debug;
 		};
@@ -296,7 +335,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"Freq Test/Preview Content\"";
 				DEVELOPMENT_TEAM = 78MZ33WP9X;
 				ENABLE_PREVIEWS = YES;
@@ -305,18 +344,25 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight <key>UISupportedInterfaceOrientations~ipad</key";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 2.0;
+				NEW_SETTING = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ashutoshbhardwaj.easyeartune;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
+				UIDeviceFamily = 1;
 			};
 			name = Release;
 		};

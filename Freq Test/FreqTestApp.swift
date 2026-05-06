@@ -28,12 +28,16 @@ private struct RootView: View {
     @EnvironmentObject var settings: SettingsStore
 
     var body: some View {
-        if !settings.hasSeenWelcome {
-            WelcomeView()
-        } else if !settings.hasSeenInstructions {
-            FirstTimeInstructionsView()
-        } else {
-            ContentView()
+        Group {
+            if !settings.hasSeenWelcome {
+                WelcomeView()
+            } else if !settings.hasSeenInstructions {
+                FirstTimeInstructionsView()
+            } else {
+                ContentView()
+            }
         }
+        .animation(.easeInOut(duration: 0.35), value: settings.hasSeenWelcome)
+        .animation(.easeInOut(duration: 0.35), value: settings.hasSeenInstructions)
     }
 }

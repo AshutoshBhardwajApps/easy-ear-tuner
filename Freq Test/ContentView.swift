@@ -115,7 +115,6 @@ struct FrequencyControlsView: View {
 
 struct FirstTimeInstructionsView: View {
     @EnvironmentObject var settings: SettingsStore
-    @State private var navigateToMain = false
 
     var body: some View {
         ScrollView {
@@ -135,17 +134,12 @@ struct FirstTimeInstructionsView: View {
 
                 Button("OK") {
                     settings.hasSeenInstructions = true
-                    navigateToMain = true
                 }
                 .font(.title2)
                 .padding()
                 .background(Color.blue)
                 .foregroundColor(.white)
                 .cornerRadius(10)
-
-                NavigationLink(destination: ContentView(), isActive: $navigateToMain) {
-                    EmptyView()
-                }
             }
             .padding()
             .background(Color(UIColor.systemBackground).opacity(0.95))
@@ -216,7 +210,6 @@ struct DisclaimerText: View {
 
 struct WelcomeView: View {
     @EnvironmentObject var settings: SettingsStore
-    @State private var navigateToInstructions = false
 
     var body: some View {
         VStack(spacing: 30) {
@@ -242,17 +235,12 @@ struct WelcomeView: View {
 
             Button("Get Started") {
                 settings.hasSeenWelcome = true
-                navigateToInstructions = true
             }
             .font(.title2)
             .padding()
             .background(Color.green)
             .foregroundColor(.white)
             .cornerRadius(10)
-
-            NavigationLink(destination: FirstTimeInstructionsView(), isActive: $navigateToInstructions) {
-                EmptyView()
-            }
 
             Spacer()
         }

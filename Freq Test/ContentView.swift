@@ -33,13 +33,17 @@ class SoundGenerator {
     var sampleRate: Double = 44100.0
     var phase: Double = 0.0
 
+    /// 0 = silent, 1 = full volume. Used by SweepEngine to mute during gap intervals
+    /// without stopping the audio engine (avoids glitches on rapid stop/start).
+    var amplitude: Float = 1.0
+
     init() {
         audioEngine = AVAudioEngine()
         audioSourceNode = AVAudioSourceNode { (_, _, frameCount, audioBufferList) -> OSStatus in
             let bufferPointer = UnsafeMutableAudioBufferListPointer(audioBufferList)
             let phaseIncrement = 2.0 * .pi * self.frequency / self.sampleRate
             for frame in 0..<Int(frameCount) {
-                let value = sin(self.phase)
+                let value = sin(self.phase) * Double(self.amplitude)
                 self.phase += phaseIncrement
                 if self.phase >= 2.0 * .pi { self.phase -= 2.0 * .pi }
                 for buffer in bufferPointer {
@@ -269,6 +273,8 @@ struct ContentView: View {
     @State private var isPlaying = false
     @State private var showInstructions = false
     @State private var showPromo = false
+    @State private var showHearingTest = false
+    @State private var showHistory = false
 
     var soundGenerator = SoundGenerator()
     var volumeManager = VolumeManager()
@@ -285,6 +291,42 @@ struct ContentView: View {
                     volumeManager: volumeManager,
                     onStop: handleStop
                 )
+
+                // Hearing test entry points
+                HStack(spacing: 12) {
+                    NavigationLink(destination: HearingTestView()
+                        .environmentObject(settings)
+                        .environmentObject(purchaseManager),
+                        isActive: $showHearingTest) { EmptyView() }
+
+                    Button {
+                        showHearingTest = true
+                    } label: {
+                        Label("Hearing Test", systemImage: "ear")
+                            .font(.system(size: 15, weight: .semibold))
+                            .foregroundColor(.black)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 12)
+                            .background(Color.green)
+                            .cornerRadius(12)
+                    }
+
+                    Button {
+                        showHistory = true
+                    } label: {
+                        Label("History", systemImage: "clock")
+                            .font(.system(size: 15, weight: .semibold))
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 12)
+                            .background(Color.white.opacity(0.12))
+                            .cornerRadius(12)
+                    }
+                    .sheet(isPresented: $showHistory) {
+                        HearingHistoryView()
+                    }
+                }
+                .padding(.horizontal, 4)
 
                 if !settings.hasRemovedAds {
                     Button("Remove Ads — \(purchaseManager.localizedPrice ?? "$0.99")") {

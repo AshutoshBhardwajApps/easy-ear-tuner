@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 
 @main
 struct FreqTestApp: App {
@@ -19,6 +20,7 @@ struct FreqTestApp: App {
                 await purchaseManager.restorePurchases()
             }
         }
+        .modelContainer(for: HearingResult.self)
     }
 }
 

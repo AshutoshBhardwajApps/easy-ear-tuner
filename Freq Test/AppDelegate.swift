@@ -24,13 +24,9 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
 
         MobileAds.shared.start()
 
-        if #available(iOS 14, *) {
-            ATTrackingManager.requestTrackingAuthorization { _ in
-                Task { @MainActor in AdManager.shared.preload() }
-            }
-        } else {
-            AdManager.shared.preload()
-        }
+        // ATT prompt is triggered from the first visible view via requestATTIfNeeded()
+        // rather than here — calling it in didFinishLaunching fires before the window
+        // is active on iOS 17+ and the prompt silently never appears.
 
         return true
     }

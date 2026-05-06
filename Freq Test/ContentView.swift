@@ -1,6 +1,7 @@
 import SwiftUI
 import AVFoundation
 import MediaPlayer
+import AppTrackingTransparency
 
 // MARK: - VolumeManager
 
@@ -339,6 +340,7 @@ struct ContentView: View {
                 .environmentObject(settings)
                 .environmentObject(purchaseManager)
         }
+        .onAppear { requestATTIfNeeded() }
     }
 
     private func handleStop() {
@@ -350,5 +352,19 @@ struct ContentView: View {
         } else {
             AdManager.shared.presentIfAllowed()
         }
+    }
+}
+
+// Delay ATT until the main view is visible — firing it in didFinishLaunching
+// silently fails on iOS 17+ because the window isn't active yet.
+func requestATTIfNeeded() {
+    if #available(iOS 14, *) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            ATTrackingManager.requestTrackingAuthorization { _ in
+                Task { @MainActor in AdManager.shared.preload() }
+            }
+        }
+    } else {
+        AdManager.shared.preload()
     }
 }

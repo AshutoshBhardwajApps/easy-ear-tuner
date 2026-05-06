@@ -8,7 +8,7 @@ enum Constants {
 
     /// Real interstitial ad unit ID from AdMob.
     /// Replace with your actual ID from AdMob console before shipping.
-    static let interstitialAdUnitID = "ca-app-pub-3940256099942544/4411468910"
+    static let interstitialAdUnitID = "ca-app-pub-2320635595451132/9279014825"
 
     static let userDefaultsPrefix = "easyeartune."
 }

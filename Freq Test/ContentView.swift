@@ -365,6 +365,6 @@ func requestATTIfNeeded() {
             }
         }
     } else {
-        AdManager.shared.preload()
+        Task { @MainActor in AdManager.shared.preload() }
     }
 }

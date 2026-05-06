@@ -19,7 +19,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
         // Paste your device's hashed ID here (from Xcode console after first ad request)
         // so your device serves test ads while real devices see real ads.
         MobileAds.shared.requestConfiguration.testDeviceIdentifiers = [
-            // "PASTE_YOUR_DEVICE_HASH_HERE",
+            "8db75299912f34924228c6d5e577456a",
         ]
 
         MobileAds.shared.start()

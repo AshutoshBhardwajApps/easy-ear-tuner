@@ -4,7 +4,7 @@ enum Constants {
     static let appName = "Easy Ear Tuner"
 
     /// Must match the Product ID set in App Store Connect.
-    static let removeAdsProductID = "com.ashutoshbhardwaj.easyeartune.noadsvip"
+    static let removeAdsProductID = "com.ashutoshbhardwaj.easyeartune.premium"
 
     /// Real interstitial ad unit ID from AdMob.
     /// Replace with your actual ID from AdMob console before shipping.

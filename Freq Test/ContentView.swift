@@ -324,6 +324,12 @@ struct ContentView: View {
                     .font(.footnote)
                     .foregroundColor(.secondary)
                     .padding(.top, 4)
+
+                    Button("Restore Purchases") {
+                        Task { await purchaseManager.restorePurchases() }
+                    }
+                    .font(.footnote)
+                    .foregroundColor(.secondary)
                 }
 
                 Button("Instructions") {

@@ -23,6 +23,12 @@
 		E150AA072C9E5FB200145149 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E150AA062C9E5FB200145149 /* Preview Assets.xcassets */; };
 		E176B87E2FAAE74800FD54CF /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = E176B87D2FAAE74800FD54CF /* GoogleMobileAds */; };
 		E39A226413734895BA5BE66F /* FreqTestApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D124C18A3B804C9D87A8113E /* FreqTestApp.swift */; };
+		D59209A240D157B7A7AD009A /* ConsentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2837D7AF3B4EC0D8932AA2B /* ConsentManager.swift */; };
+		D8A730C5E38636CC2C211F13 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A44C5B3B6B3F88F5A20D843A /* SettingsView.swift */; };
+		6F48976028B3E56068D6EEB6 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 6F116FFE2021D181A930F537 /* PrivacyInfo.xcprivacy */; };
+		125A5F21045268FE55A7C677 /* MetaAdapterTarget in Frameworks */ = {isa = PBXBuildFile; productRef = 58AF4F115F8A9360FD86E12B /* MetaAdapterTarget */; };
+		C79D6A969D86D4081ECA3677 /* LiftoffMonetizeAdapterTarget in Frameworks */ = {isa = PBXBuildFile; productRef = AF7EDE768B4DFF7F5ECFA262 /* LiftoffMonetizeAdapterTarget */; };
+		D5FD2D1F6BFFBD5F181A5B46 /* PangleAdapterTarget in Frameworks */ = {isa = PBXBuildFile; productRef = E1439F8EF10278A353FC4E97 /* PangleAdapterTarget */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +49,9 @@
 		E150AA032C9E5FB200145149 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E150AA062C9E5FB200145149 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		F40E4A7093EA4F1E8390A597 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		F2837D7AF3B4EC0D8932AA2B /* ConsentManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ConsentManager.swift; sourceTree = "<group>"; };
+		A44C5B3B6B3F88F5A20D843A /* SettingsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		6F116FFE2021D181A930F537 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +60,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				E176B87E2FAAE74800FD54CF /* GoogleMobileAds in Frameworks */,
+				D5FD2D1F6BFFBD5F181A5B46 /* PangleAdapterTarget in Frameworks */,
+				C79D6A969D86D4081ECA3677 /* LiftoffMonetizeAdapterTarget in Frameworks */,
+				125A5F21045268FE55A7C677 /* MetaAdapterTarget in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -88,6 +100,9 @@
 				3B1399134F89468EA8C1E6DC /* AdPresenter.swift */,
 				DCFFA7B7837443E18ADB0C4F /* PurchaseManager.swift */,
 				A59D4F96DDD74C218708DCEE /* SettingsStore.swift */,
+				F2837D7AF3B4EC0D8932AA2B /* ConsentManager.swift */,
+				A44C5B3B6B3F88F5A20D843A /* SettingsView.swift */,
+				6F116FFE2021D181A930F537 /* PrivacyInfo.xcprivacy */,
 				5CC7D61F42CF4E379ABBA731 /* RemoveAdsPromoView.swift */,
 				D124C18A3B804C9D87A8113E /* FreqTestApp.swift */,
 				E150AA032C9E5FB200145149 /* Assets.xcassets */,
@@ -120,6 +135,12 @@
 			dependencies = (
 			);
 			name = "Freq Test";
+			packageProductDependencies = (
+				E176B87D2FAAE74800FD54CF /* GoogleMobileAds */,
+				58AF4F115F8A9360FD86E12B /* MetaAdapterTarget */,
+				AF7EDE768B4DFF7F5ECFA262 /* LiftoffMonetizeAdapterTarget */,
+				E1439F8EF10278A353FC4E97 /* PangleAdapterTarget */,
+			);
 			productName = "Freq Test";
 			productReference = E150A9FC2C9E5FB000145149 /* Freq Test.app */;
 			productType = "com.apple.product-type.application";
@@ -150,6 +171,9 @@
 			mainGroup = E150A9F32C9E5FB000145149;
 			packageReferences = (
 				E176B87C2FAAE74800FD54CF /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
+				1C054D4ABB45122698E68C28 /* XCRemoteSwiftPackageReference "googleads-mobile-ios-mediation-meta" */,
+				830365935445A5B04B606D44 /* XCRemoteSwiftPackageReference "googleads-mobile-ios-mediation-liftoffmonetize" */,
+				07371196AFF16F5379D4CEF4 /* XCRemoteSwiftPackageReference "googleads-mobile-ios-mediation-pangle" */,
 			);
 			productRefGroup = E150A9FD2C9E5FB000145149 /* Products */;
 			projectDirPath = "";
@@ -165,6 +189,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6F48976028B3E56068D6EEB6 /* PrivacyInfo.xcprivacy in Resources */,
 				E150AA072C9E5FB200145149 /* Preview Assets.xcassets in Resources */,
 				E150AA042C9E5FB200145149 /* Assets.xcassets in Resources */,
 			);
@@ -188,6 +213,8 @@
 				D981CF3CA367424CA06AAFAF /* AdPresenter.swift in Sources */,
 				2C0D88D1136143E28F9A610D /* PurchaseManager.swift in Sources */,
 				48A56AACF788487AA9156C53 /* SettingsStore.swift in Sources */,
+				D59209A240D157B7A7AD009A /* ConsentManager.swift in Sources */,
+				D8A730C5E38636CC2C211F13 /* SettingsView.swift in Sources */,
 				4564B6D3725349719DA67B03 /* RemoveAdsPromoView.swift in Sources */,
 				E39A226413734895BA5BE66F /* FreqTestApp.swift in Sources */,
 			);
@@ -321,7 +348,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_ASSET_PATHS = "\"Freq Test/Preview Content\"";
 				DEVELOPMENT_TEAM = 78MZ33WP9X;
 				ENABLE_PREVIEWS = YES;
@@ -331,7 +358,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.0;
+				MARKETING_VERSION = 3.1;
 				NEW_SETTING = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ashutoshbhardwaj.easyeartune;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -352,7 +379,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_ASSET_PATHS = "\"Freq Test/Preview Content\"";
 				DEVELOPMENT_TEAM = 78MZ33WP9X;
 				ENABLE_PREVIEWS = YES;
@@ -362,7 +389,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.0;
+				MARKETING_VERSION = 3.1;
 				NEW_SETTING = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ashutoshbhardwaj.easyeartune;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -406,7 +433,31 @@
 			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 13.3.0;
+				minimumVersion = 13.6.0;
+			};
+		};
+		1C054D4ABB45122698E68C28 /* XCRemoteSwiftPackageReference "googleads-mobile-ios-mediation-meta" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googleads/googleads-mobile-ios-mediation-meta.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.21.101;
+			};
+		};
+		830365935445A5B04B606D44 /* XCRemoteSwiftPackageReference "googleads-mobile-ios-mediation-liftoffmonetize" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googleads/googleads-mobile-ios-mediation-liftoffmonetize.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.7.400;
+			};
+		};
+		07371196AFF16F5379D4CEF4 /* XCRemoteSwiftPackageReference "googleads-mobile-ios-mediation-pangle" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googleads/googleads-mobile-ios-mediation-pangle.git";
+			requirement = {
+				kind = exactVersion;
+				version = 8.1.10100;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -416,6 +467,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E176B87C2FAAE74800FD54CF /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
 			productName = GoogleMobileAds;
+		};
+		58AF4F115F8A9360FD86E12B /* MetaAdapterTarget */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1C054D4ABB45122698E68C28 /* XCRemoteSwiftPackageReference "googleads-mobile-ios-mediation-meta" */;
+			productName = MetaAdapterTarget;
+		};
+		AF7EDE768B4DFF7F5ECFA262 /* LiftoffMonetizeAdapterTarget */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 830365935445A5B04B606D44 /* XCRemoteSwiftPackageReference "googleads-mobile-ios-mediation-liftoffmonetize" */;
+			productName = LiftoffMonetizeAdapterTarget;
+		};
+		E1439F8EF10278A353FC4E97 /* PangleAdapterTarget */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 07371196AFF16F5379D4CEF4 /* XCRemoteSwiftPackageReference "googleads-mobile-ios-mediation-pangle" */;
+			productName = PangleAdapterTarget;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

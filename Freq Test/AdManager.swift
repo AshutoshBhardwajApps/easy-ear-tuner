@@ -11,7 +11,13 @@ extension Notification.Name {
 final class AdManager: NSObject, ObservableObject {
     static let shared = AdManager()
 
+    /// Debug builds use Google's always-filling test unit (as CoopHockey
+    /// does), so development never depends on the real unit filling.
+    #if DEBUG
+    private let interstitialID = "ca-app-pub-3940256099942544/4411468910"
+    #else
     private let interstitialID = Constants.interstitialAdUnitID
+    #endif
 
     // Show an ad every 3 stops (not every single one — too aggressive for a tuner).
     private let minRoundsBetweenAds: Int = 3
@@ -107,6 +113,19 @@ final class AdManager: NSObject, ObservableObject {
 
     // MARK: - Presenter helpers
 
+    /// The controller actually on top of the presentation stack. Anything
+    /// shown from inside a sheet or fullScreenCover must present from here,
+    /// not AdPresenter's anchor — UIKit refuses to present from a controller
+    /// that is already presenting, and the failure is silent (CoopHockey ran
+    /// 100% fill with zero impressions for weeks this way).
+    static func topmostPresenterVC() -> UIViewController? {
+        let scenes = UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .filter { $0.activationState == .foregroundActive }
+        let root = scenes.first?.windows.first(where: { $0.isKeyWindow })?.rootViewController
+        return topViewController(base: root) ?? AdPresenter.holder
+    }
+
     private static func presenterVC() -> UIViewController? {
         if let vc = AdPresenter.holder, vc.viewIfLoaded?.window != nil { return vc }
         let scenes = UIApplication.shared.connectedScenes
@@ -130,8 +149,16 @@ extension AdManager: FullScreenContentDelegate {
     func adWillPresentFullScreenContent(_ ad: any FullScreenPresentingAd) {
         NotificationCenter.default.post(name: .adWillPresent, object: nil)
     }
+    /// The only callback that confirms AdMob actually counted the render.
+    func adDidRecordImpression(_ ad: any FullScreenPresentingAd) {
+        print("[AdManager] ✅ impression recorded")
+    }
     func ad(_ ad: any FullScreenPresentingAd, didFailToPresentFullScreenContentWithError error: Error) {
+        // Loud on purpose: a present failure looks like healthy fill in the
+        // AdMob report except for the impression count.
+        print("[AdManager] ❌ present failed: \(error.localizedDescription)")
         NotificationCenter.default.post(name: .adDidDismiss, object: nil)
+        preload()
     }
     func adDidDismissFullScreenContent(_ ad: any FullScreenPresentingAd) {
         NotificationCenter.default.post(name: .adDidDismiss, object: nil)
